@@ -1,0 +1,50 @@
+Index	Name	Description	File Name	Quantity
+1	Assembly		D:/Projetos/seguidor-de-linha/3d/montagem.FCStd	1
+1.1	Corpo		D:/Projetos/seguidor-de-linha/3d/carcaça.FCStd	1
+1.2	Suporte-Motor		D:/Projetos/seguidor-de-linha/3d/suporte motor.FCStd	2
+1.3	dc_motor_and_wheel003		D:/Projetos/seguidor-de-linha/3d/motor.FCStd	2
+1.3.1	dc_motor_and_wheel001		D:/Projetos/seguidor-de-linha/3d/motor.FCStd	1
+1.4	dc_motor_and_wheel003		D:/Projetos/seguidor-de-linha/3d/roda.FCStd	4
+1.4.1	dc_motor_and_wheel		D:/Projetos/seguidor-de-linha/3d/roda.FCStd	1
+1.4.2	dc_motor_and_wheel002		D:/Projetos/seguidor-de-linha/3d/roda.FCStd	1
+1.5	Part		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	5
+1.5.1	TCRT5000L_Module		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.2	TCRT5000L_Module001		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.3	TCRT5000L_Module002		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.4	TCRT5000L_Module003		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.5	TCRT5000L_Module004		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.6	TCRT5000L_Module005		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.7	TCRT5000L_Module006		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.8	TCRT5000L_Module007		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.9	TCRT5000L_Module008		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.10	TCRT5000L_Module009		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.11	TCRT5000L_Module010		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.12	TCRT5000L_Module011		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.13	TCRT5000L_Module012		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.14	TCRT5000L_Module013		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.15	TCRT5000L_Module014		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.5.16	TCRT5000L_Module015		D:/Projetos/seguidor-de-linha/3d/sensor tcrt5000.FCStd	1
+1.6	Assembly001		D:/Projetos/seguidor-de-linha/3d/montagem.FCStd	1
+1.6.1	Montagem-Eixo-Dianteiro		D:/Projetos/seguidor-de-linha/3d/montagem eixo dianteiro.FCStd	1
+1.6.1.1	Suporte-Eixo-Dianteiro-1		D:/Projetos/seguidor-de-linha/3d/peça suporte eixo dianteiro 1.FCStd	2
+1.6.1.2	Suporte-Eixo-Dianteiro-2		D:/Projetos/seguidor-de-linha/3d/peça suporte eixo dianteiro 2.FCStd	2
+1.6.1.3	Eixo-Dianteiro		D:/Projetos/seguidor-de-linha/3d/eixo dianteiro.FCStd	2
+1.6.1.4	M1.6x10-Parafuso		D:/Projetos/seguidor-de-linha/3d/Parafusos.FCStd	4
+1.7	Assembly002		D:/Projetos/seguidor-de-linha/3d/montagem.FCStd	1
+1.7.1	Montagem-Eixo-Dianteiro		D:/Projetos/seguidor-de-linha/3d/montagem eixo dianteiro.FCStd	1
+1.7.1.1	Suporte-Eixo-Dianteiro-1		D:/Projetos/seguidor-de-linha/3d/peça suporte eixo dianteiro 1.FCStd	2
+1.7.1.2	Suporte-Eixo-Dianteiro-2		D:/Projetos/seguidor-de-linha/3d/peça suporte eixo dianteiro 2.FCStd	2
+1.7.1.3	Eixo-Dianteiro		D:/Projetos/seguidor-de-linha/3d/eixo dianteiro.FCStd	2
+1.7.1.4	M1.6x10-Parafuso		D:/Projetos/seguidor-de-linha/3d/Parafusos.FCStd	4
+1.8	H-Bridge_L298N011		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.1	H-Bridge_L298N		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.2	H-Bridge_L298N001		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.3	H-Bridge_L298N002		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.4	H-Bridge_L298N003		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.5	H-Bridge_L298N004		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.6	H-Bridge_L298N005		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.7	H-Bridge_L298N006		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.8	H-Bridge_L298N007		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.9	H-Bridge_L298N008		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.10	H-Bridge_L298N009		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
+1.8.11	H-Bridge_L298N010		D:/Projetos/seguidor-de-linha/3d/Ponte H.FCStd	1
