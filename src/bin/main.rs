@@ -25,6 +25,11 @@ use esp_hal::{
     timer::timg::TimerGroup,
     analog::adc::{self, Attenuation},
     system::software_reset,
+    gpio::{
+        Output,
+        OutputConfig,
+        Level
+    },
 };
 use esp_wifi::{
     self,
@@ -95,7 +100,7 @@ fn find_deviation(esquerda: u16, centro: u16, direita: u16) -> f32 {
 
 /// Calcula o PWM para retornar aos motores com base em um 
 /// desvio inserido na chamada da função
-/// retorna dois valores de 0 - 100 
+/// retorna dois valores de 0 - 100
 fn calc_pwm(desvio: f32) -> (u8, u8) {
     if desvio == 0.0 { return (100, 100) }
     else if desvio < 0.0 {
@@ -121,7 +126,7 @@ fn get_commands(
     let timestamp = SmoltcpInstant::from_millis(instant.duration_since_epoch().as_millis() as i64);
     interface.poll(timestamp, &mut wifi_interfaces.ap, socket_set);
 
-    let mut socket = socket_set.get_mut::<TcpSocket>(*tcp_handle);
+    let socket = socket_set.get_mut::<TcpSocket>(*tcp_handle);
 
     let mut command = None;
 
@@ -136,7 +141,7 @@ fn get_commands(
             if !recv.is_empty() {
                 println!("tcp:8080 recv data: {:?}", recv);
             }
-            let mut data = recv.to_vec();
+            let data = recv.to_vec();
             (data.len(), data)
         }).unwrap();
         if !data.is_empty() {
@@ -151,10 +156,10 @@ fn get_commands(
     }
     if socket.can_send() {
         socket.send(| mut send | {
-            let rsp = format!("pwm Motor Esquerdo: {},\npwm Motor Direito: {}\n", motores.pwm_esq, motores.pwm_dir);
             if send.len() < 100 {
                 return (0, "".to_string());
             }
+            let rsp = format!("pwm Motor Esquerdo: {},\npwm Motor Direito: {}\n", motores.pwm_esq, motores.pwm_dir);
             send.write(rsp.as_bytes()).unwrap();
             (rsp.len(), rsp)
         }).unwrap();
@@ -171,6 +176,8 @@ fn main() -> ! {
     let config = esp_hal::Config::default().with_cpu_clock(CpuClock::max());
     let peripherals = esp_hal::init(config);
 
+    let delay = Delay::new();
+    
     let instant = Instant::now();
 
     // Alocador para o esp_wifi e outras funções que necessitam de alocação
@@ -232,7 +239,6 @@ fn main() -> ! {
 
     // fim da configuração smoltcp
     // Início da configuração do pwm para os motores
-    let mut delay = Delay::new();
 
     let out_esq = peripherals.GPIO13;
     let out_dir = peripherals.GPIO12;
@@ -270,7 +276,7 @@ fn main() -> ! {
     // Inicio da configuração dos pinos do ADC
     let mut adc_config = adc::AdcConfig::new();
 
-    let analog_pin_esq = peripherals.GPIO33;
+    let analog_pin_esq = peripherals.GPIO36;
     let analog_pin_ctr = peripherals.GPIO34;
     let analog_pin_dir = peripherals.GPIO35;
 
@@ -289,6 +295,29 @@ fn main() -> ! {
 
     let mut adc_sensors = adc::Adc::new(peripherals.ADC1, adc_config);
     // Fim da configuração dos pinos do ADC
+    
+    // Inicio configuração dos pinos direcionais da ponte H
+    
+    let mut in1 = Output::new(peripherals.GPIO19, Level::Low, OutputConfig::default());
+    let mut in2 = Output::new(peripherals.GPIO21, Level::Low, OutputConfig::default());
+    let mut in3 = Output::new(peripherals.GPIO22, Level::Low, OutputConfig::default());
+    let mut in4 = Output::new(peripherals.GPIO23, Level::Low, OutputConfig::default());
+    
+    let mut direcao = | frente: bool | {
+        if frente {
+            in2.set_low();
+            in4.set_low();
+            in1.set_high();
+            in3.set_high();
+        } else {
+            in1.set_low();
+            in3.set_low();
+            in2.set_high();
+            in4.set_high();
+        }
+    };
+    
+    // fim da configuração
 
     let mut last_command = Command::Stop;
 
@@ -296,6 +325,8 @@ fn main() -> ! {
         pwm_dir: 0,
         pwm_esq: 0
     };
+    
+    direcao(true);
 
     loop {
         let command = get_commands(&mut interface, &mut socket_set, &tcp_handle, &mut wifi_interfaces, &instant, &motores).unwrap_or(last_command);
@@ -323,5 +354,4 @@ fn main() -> ! {
         }
         delay.delay_millis(DELAY_LOOP_PRINCIPAL);
     }
-    // for inspiration have a look at the examples at https://github.com/esp-rs/esp-hal/tree/esp-hal-v1.0.0-beta.0/examples/src/bin
 }
