@@ -62,6 +62,7 @@ use esp_println::println;
 
 extern crate nb;
 
+const LIMITE: u16 = 1000;
 const PWM_FREQ_KHZ: u32 = 20;
 const DELAY_LOOP_PRINCIPAL: u32 = 30;
 
@@ -89,29 +90,41 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 
 extern crate alloc;
 
-/// Calcula o desvio com base em 3 valores de entrada
-fn find_deviation(esquerda: u16, centro: u16, direita: u16) -> f32 {
-    let valor_sensores = esquerda + centro + direita;
-
-    let desvio = if valor_sensores != 0 { (esquerda as i16 * -1 + direita as i16 * 1) as f32 / valor_sensores as f32 } else { 0.0 };
-
-    desvio
-}
-
-/// Calcula o PWM para retornar aos motores com base em um 
-/// desvio inserido na chamada da função
-/// retorna dois valores de 0 - 100
-fn calc_pwm(desvio: f32) -> (u8, u8) {
-    if desvio == 0.0 { return (100, 100) }
-    else if desvio < 0.0 {
-        let pct = (desvio.abs() * 100f32) as u8;
-        return (100 - pct, 100);
-    } else if desvio > 0.0 {
-        let pct = (desvio * 100f32) as u8;
-        return (100, 100 - pct);
+fn controle(esq: u16, ctr: u16, dir: u16) -> (u8, u8) {
+    if ctr >= LIMITE {
+        (100, 100)
+    } else if dir >= LIMITE {
+        (100, 95)
+    } else if esq >= LIMITE {
+        (95, 100)
+    } else {
+        (90, 90)
     }
-    (0, 0)
 }
+
+///// Calcula o desvio com base em 3 valores de entrada
+//fn find_deviation(esquerda: u16, centro: u16, direita: u16) -> f32 {
+//    let valor_sensores = esquerda + centro + direita;
+//
+//    let desvio = if valor_sensores != 0 { (esquerda as i16 * -1 + direita as i16 * 1) as f32 / valor_sensores as f32 } else { 0.0 };
+//
+//    desvio
+//}
+//
+///// Calcula o PWM para retornar aos motores com base em um 
+///// desvio inserido na chamada da função
+///// retorna dois valores de 0 - 100
+//fn calc_pwm(desvio: f32) -> (u8, u8) {
+//    if desvio == 0.0 { return (100, 100) }
+//    else if desvio < 0.0 {
+//        let pct = (desvio.abs() * 100f32) as u8;
+//        return (100 - pct, 100);
+//    } else if desvio > 0.0 {
+//        let pct = (desvio * 100f32) as u8;
+//        return (100, 100 - pct);
+//    }
+//    (0, 0)
+//}
 
 /// Pega os handlers necessários e retorna o comando que o cliente responder,
 /// Envia dados de telemetria
@@ -342,9 +355,11 @@ fn main() -> ! {
             let ctr = nb::block!(adc_sensors.read_oneshot(&mut pin_ctr)).unwrap();
             let dir = nb::block!(adc_sensors.read_oneshot(&mut pin_dir)).unwrap();
 
-            let desvio = find_deviation(esq, ctr, dir);
-
-            let (pwm_esq, pwm_dir) = calc_pwm(desvio);
+            //let desvio = find_deviation(esq, ctr, dir);
+            //
+            //let (pwm_esq, pwm_dir) = calc_pwm(desvio);
+            
+            let (pwm_esq, pwm_dir) = controle(esq, ctr, dir);
 
             mot_esq.set_duty(pwm_esq).unwrap();
             mot_dir.set_duty(pwm_dir).unwrap();
