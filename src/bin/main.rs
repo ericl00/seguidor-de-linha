@@ -63,7 +63,7 @@ use esp_println::println;
 extern crate nb;
 
 const LIMITE: u16 = 1000;
-const PWM_FREQ_KHZ: u32 = 20;
+const PWM_FREQ_KHZ: u32 = 5;
 const DELAY_LOOP_PRINCIPAL: u32 = 30;
 
 const RX_BUFFER_SIZE: usize = 1024;
@@ -81,6 +81,23 @@ struct Telemetria {
     pwm_esq: u8
 }
 
+#[derive(PartialEq, Clone)]
+enum Direction {
+    Esquerda,
+    Frente,
+    Direita
+}
+
+impl Direction {
+    fn value(&self) -> (u8, u8) {
+        match self {
+            self::Esquerda => (0, 75),
+            self::Frente => (75, 75),
+            self::Direita => (75, 0),
+        }
+    }
+}
+
 #[panic_handler]
 fn panic(info: &core::panic::PanicInfo) -> ! {
     println!("panic!: {:?}", info);
@@ -90,16 +107,25 @@ fn panic(info: &core::panic::PanicInfo) -> ! {
 
 extern crate alloc;
 
-fn controle(esq: u16, ctr: u16, dir: u16) -> (u8, u8) {
-    if ctr >= LIMITE {
-        (100, 100)
-    } else if dir >= LIMITE {
-        (100, 95)
-    } else if esq >= LIMITE {
-        (95, 100)
+fn controle(esq: u16, _ctr: u16, dir: u16) -> Direction {
+    if dir <= LIMITE {
+        Direction::Direita
+    } else if esq <= LIMITE {
+        Direction::Esquerda
     } else {
-        (90, 90)
+        Direction::Frente
     }
+    
+    
+    //if ctr <= LIMITE {
+    //    (75, 75)
+    //} else if dir <= LIMITE {
+    //    (75, 0)
+    //} else if esq <= LIMITE {
+    //    (0, 75)
+    //} else {
+    //    (75, 75)
+    //}
 }
 
 ///// Calcula o desvio com base em 3 valores de entrada
@@ -333,11 +359,14 @@ fn main() -> ! {
     // fim da configuração
 
     let mut last_command = Command::Stop;
+    let mut last_direction = Direction::Frente;
 
     let mut motores = Telemetria {
         pwm_dir: 0,
         pwm_esq: 0
     };
+    
+    let (mut pwm_esq, mut pwm_dir) = (0,0);
     
     direcao(true);
 
@@ -359,8 +388,21 @@ fn main() -> ! {
             //
             //let (pwm_esq, pwm_dir) = calc_pwm(desvio);
             
-            let (pwm_esq, pwm_dir) = controle(esq, ctr, dir);
+            let direction = controle(esq, ctr, dir);
 
+
+            if (last_direction == Direction::Direita) || (last_direction == Direction::Esquerda) {
+                if direction == Direction::Frente {
+                    (pwm_esq, pwm_dir) = direction.value();
+                } else {
+                    continue;
+                }
+            } else {
+                (pwm_esq, pwm_dir) = direction.value();
+            }
+
+            last_direction = direction.clone();
+            
             mot_esq.set_duty(pwm_esq).unwrap();
             mot_dir.set_duty(pwm_dir).unwrap();
 
